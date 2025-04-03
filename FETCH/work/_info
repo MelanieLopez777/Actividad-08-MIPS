@@ -1,0 +1,128 @@
+m255
+K4
+z2
+!s11f vlog 2020.1 2020.02, Feb 28 2020
+13
+!s112 1.1
+!i10d 8192
+!i10e 25
+!i10f 100
+cModel Technology
+dF:/CLASE_ADC/ACT. CLASE/MIPS_FETCH
+vbuffer_contador_de_programa
+!s110 1743645413
+!i10b 1
+!s100 =5coMozAP4WR7m;<M1?IA1
+Z0 !s11b Dg1SIo80bB@j0V0VzS_@n1
+II=?oDbkXIbiP:71nFR0F00
+Z1 VDg1SIo80bB@j0V0VzS_@n1
+Z2 dC:/Users/alems/Documents/Actividad-08-MIPS/FETCH
+w1743643676
+8C:/Users/alems/Documents/Actividad-08-MIPS/FETCH/buffer_pc.v
+FC:/Users/alems/Documents/Actividad-08-MIPS/FETCH/buffer_pc.v
+!i122 0
+L0 5 20
+Z3 OV;L;2020.1;71
+r1
+!s85 0
+31
+Z4 !s108 1743645413.000000
+!s107 C:/Users/alems/Documents/Actividad-08-MIPS/FETCH/buffer_pc.v|
+!s90 -reportprogress|300|-work|work|-stats=none|C:/Users/alems/Documents/Actividad-08-MIPS/FETCH/buffer_pc.v|
+!i113 1
+Z5 o-work work
+Z6 tCvgOpt 0
+vmemoria_de_instrucciones
+Z7 !s110 1743645414
+!i10b 1
+!s100 Ti=Ob_0U?zgeM]4Jfb5fX0
+R0
+Ic6CMGdJe`FQYMLXCmWBC^3
+R1
+R2
+w1743612496
+8C:/Users/alems/Documents/Actividad-08-MIPS/FETCH/memoria_de_instrucciones.v
+FC:/Users/alems/Documents/Actividad-08-MIPS/FETCH/memoria_de_instrucciones.v
+!i122 1
+L0 3 20
+R3
+r1
+!s85 0
+31
+R4
+!s107 C:/Users/alems/Documents/Actividad-08-MIPS/FETCH/memoria_de_instrucciones.v|
+!s90 -reportprogress|300|-work|work|-stats=none|C:/Users/alems/Documents/Actividad-08-MIPS/FETCH/memoria_de_instrucciones.v|
+!i113 1
+R5
+R6
+vMIPS_F1
+R7
+!i10b 1
+!s100 >SI]iV@Hm`Vdm4fd8?CH41
+R0
+IiB2U3lCR`0LC5`b1gogDL2
+R1
+R2
+w1743643152
+8C:/Users/alems/Documents/Actividad-08-MIPS/FETCH/MIPS_F1.v
+FC:/Users/alems/Documents/Actividad-08-MIPS/FETCH/MIPS_F1.v
+!i122 2
+L0 1 29
+R3
+r1
+!s85 0
+31
+Z8 !s108 1743645414.000000
+!s107 C:/Users/alems/Documents/Actividad-08-MIPS/FETCH/MIPS_F1.v|
+!s90 -reportprogress|300|-work|work|-stats=none|C:/Users/alems/Documents/Actividad-08-MIPS/FETCH/MIPS_F1.v|
+!i113 1
+R5
+R6
+n@m@i@p@s_@f1
+vMIPS_F1_TB
+R7
+!i10b 1
+!s100 W6jP8L;zhl:zodlm?nk6L1
+R0
+I^D_lHDh:RO_J?bD`<FnA@0
+R1
+R2
+w1743645395
+8C:\Users\alems\Documents\Actividad-08-MIPS\FETCH\MIPS_F1_TB.v
+FC:\Users\alems\Documents\Actividad-08-MIPS\FETCH\MIPS_F1_TB.v
+!i122 3
+L0 5 35
+R3
+r1
+!s85 0
+31
+R8
+!s107 C:\Users\alems\Documents\Actividad-08-MIPS\FETCH\MIPS_F1_TB.v|
+!s90 -reportprogress|300|-work|work|-stats=none|C:\Users\alems\Documents\Actividad-08-MIPS\FETCH\MIPS_F1_TB.v|
+!i113 1
+R5
+R6
+n@m@i@p@s_@f1_@t@b
+vsum_pc
+R7
+!i10b 1
+!s100 AiPCa9kPcfQW9:JaiA?MR2
+R0
+I<Dg0[dcFGhQdF3ZT2Q[kC2
+R1
+R2
+w1743643634
+8C:/Users/alems/Documents/Actividad-08-MIPS/FETCH/sum_pc.v
+FC:/Users/alems/Documents/Actividad-08-MIPS/FETCH/sum_pc.v
+!i122 4
+L0 1 13
+R3
+r1
+!s85 0
+31
+R8
+!s107 C:/Users/alems/Documents/Actividad-08-MIPS/FETCH/sum_pc.v|
+!s90 -reportprogress|300|-work|work|-stats=none|C:/Users/alems/Documents/Actividad-08-MIPS/FETCH/sum_pc.v|
+!i113 1
+R5
+R6
