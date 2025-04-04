@@ -23,7 +23,7 @@ initial begin
 end
 
 initial begin
-     $readmemb("C:\Users\alems\Documents\Actividad-08-MIPS\FETCH\instrucciones.txt",MIPS_F1_inst.memoria_de_instrucciones_inst.mem);
+     $readmemb("./instrucciones.txt",MIPS_F1_inst.memoria_de_instrucciones_inst.mem);
  end
 
 initial begin
@@ -33,7 +33,7 @@ initial begin
 	#100;
 	reset_TB = 1'b0;
 	read_enable_TB = 1'b1;
-	#1000;
+	#100;
 	$stop;
 end
 endmodule
