@@ -194,9 +194,27 @@ def decodificar():
 
         return
          
-    diccionario_opcode ={
-        "and": 0, "or": 1, "add": 2, "sub": 3,
-        "slt": 4, "nor": 5, "sw": 6, "lw": 7
+    diccionario_instruction ={
+        "and": 36, 
+        "or": 37, 
+        "add": 32, 
+        "sub": 34,
+        "nop": 0,
+        "j":2,
+        "slt": 42, 
+        "sw": 43, 
+        "lw": 35
+    }
+
+    diccionario_instruction_type ={
+        "and": "r", 
+        "or": "r", 
+        "add": "r",  
+        "sub": "r", 
+        "j": "j",
+        "slt": "r", 
+        "sw": "i", 
+        "lw": "i" 
     }
 
     lineas = content_ensamblador.split("\n")
@@ -204,25 +222,33 @@ def decodificar():
 
     for i in lineas:
         palabras = i.split('\t')
-        if len(palabras) > 0 and palabras[0] in diccionario_opcode:
-            fila_decodificada = str(format(diccionario_opcode.get(palabras[0], -1), '06b'))
-            if palabras[0] == "sw":
-                fila_decodificada += "zzzzz"
-                fila_decodificada += format(int(palabras[1][1:]), '05b')
-                fila_decodificada += format(int(palabras[2][1:]), '05b')
+        fila_decodificada = "";
+        if(diccionario_instruction_type.get(palabras[0]) == "r"):
+            print("Intruccion R: ")
+            print(palabras[0], palabras[1], palabras[2], palabras[3])
+            fila_decodificada += "000000"
+            fila_decodificada += format(int(palabras[1][1:]), '05b')
+            fila_decodificada += format(int(palabras[2][1:]), '05b')
+            fila_decodificada += format(int(palabras[3][1:]), '05b')
+            fila_decodificada += "00000"
+            fila_decodificada += str(format(diccionario_instruction.get(palabras[0], -1), '06b'))
 
-            elif palabras[0] == "lw":
-                fila_decodificada += "zzzzz"
-                fila_decodificada += format(int(palabras[1][1:]), '05b')
-                fila_decodificada += "zzzzz"
-            else:
-                fila_decodificada += format(int(palabras[1][1:]), '05b')
-                fila_decodificada += format(int(palabras[2][1:]), '05b')
-                fila_decodificada += format(int(palabras[3][1:]), '05b')
+        elif(diccionario_instruction_type.get(palabras[0]) == "i"):
+            print("Intruccion I: ")
+            fila_decodificada += str(format(diccionario_instruction.get(palabras[0], -1), '06b'))
+            fila_decodificada += format(int(palabras[3][1:]), '05b')
+            fila_decodificada += format(int(palabras[1][1:]), '05b')
+            fila_decodificada += format(int(palabras[2][1:]), '016b')
 
-            fila_decodificada += "000000000000";
-
-            instrucciones_decodificadas.append(fila_decodificada)
+        elif(diccionario_instruction_type.get(palabras[0]) == "j"):
+            print("Intruccion J: ")
+            fila_decodificada += str(format(diccionario_instruction.get(palabras[0], -1), '06b'))
+            fila_decodificada += format(int(palabras[1][1:]), '026b')
+        else:
+            fila_decodificada += "00000000000000000000000000000000"
+        
+        print(fila_decodificada + "\n")
+        instrucciones_decodificadas.append(fila_decodificada)
 
     with open('instrucciones.txt', 'w') as archivo:
         for item in instrucciones_decodificadas:
