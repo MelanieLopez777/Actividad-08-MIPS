@@ -227,9 +227,9 @@ def decodificar():
             print("Intruccion R: ")
             print(palabras[0], palabras[1], palabras[2], palabras[3])
             fila_decodificada += "000000"
-            fila_decodificada += format(int(palabras[1][1:]), '05b')
             fila_decodificada += format(int(palabras[2][1:]), '05b')
             fila_decodificada += format(int(palabras[3][1:]), '05b')
+            fila_decodificada += format(int(palabras[1][1:]), '05b')
             fila_decodificada += "00000"
             fila_decodificada += str(format(diccionario_instruction.get(palabras[0], -1), '06b'))
 

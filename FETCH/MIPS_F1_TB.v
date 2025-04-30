@@ -33,7 +33,7 @@ initial begin
 	#100;
 	reset_TB = 1'b0;
 	read_enable_TB = 1'b1;
-	#100;
+	#1500;
 	$stop;
 end
 endmodule
