@@ -1,5 +1,30 @@
-add	$4	$0	$1
-sub	$5	$1	$2
-slt	$6 	$2	$3
-and	$13	$10	$11
-or	$14	$10	$11
+sub	$20	$15	$9
+nop
+nop
+nop
+nop
+nop
+sub	$20	$20	$9
+nop
+nop
+nop
+nop
+nop
+add	$15	$5	$15
+nop
+nop
+nop
+nop
+nop
+add	$15	$9	$15
+nop
+nop
+nop
+nop
+nop
+slt	$21	$20	$15
+nop
+nop
+nop
+nop
+nop
