@@ -99,18 +99,6 @@ always @* begin
             aluSrc = 1'b1;
             regDst = 1'b0;
         end
-        //subi
-        6'b001001:
-        begin
-            memToReg = 1'b0;
-            memWrite = 1'b0;
-            memRead = 1'b0;
-            aluOp = 3'b001;
-            regWrite = 1'b1;
-            branch = 1'b0;
-            aluSrc = 1'b1;
-            regDst = 1'b0;
-        end
         //andi
         6'b001100:
         begin

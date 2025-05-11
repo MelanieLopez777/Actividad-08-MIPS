@@ -12,6 +12,9 @@ always @* begin
 	case (alu_op)
 		3'b000: alu_code = 4'b0010;
 		3'b001: alu_code = 4'b0110;
+		3'b100: alu_code = 4'b0111;
+		3'b101: alu_code = 4'b0000;
+		3'b011: alu_code = 4'b0001;
 		3'b010:
 		begin
 			case (func_field)

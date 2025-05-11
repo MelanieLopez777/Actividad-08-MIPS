@@ -214,7 +214,7 @@ unidad_de_control unidad_de_control_inst(
 
 banco_de_registros banco_de_registros_inst
 (
-    .write_enable(wire_cu_reg_write),
+    .write_enable(wire_buffer_mem_wb_o_regWrite),
     .read_reg_1(wire_buffer_if_id_o_instruction[25:21]),
     .read_reg_2(wire_buffer_if_id_o_instruction[20:16]),
     .write_reg(wire_buffer_mem_wb_o_inst_mux_br_write_address),
@@ -263,7 +263,7 @@ multiplexor multiplexor_inst(
 );
 
 instruction_mux instruction_mux_inst(
-	.regDst(wire_cu_o_regDst),
+	.regDst(wire_buffer_id_ex_o_regDst),
     .i_rt(wire_buffer_id_ex_o_rt),
     .i_rd(wire_buffer_id_ex_o_rd),
     .o_br_write_address(wire_inst_mux_o_br_write_address)
@@ -271,7 +271,7 @@ instruction_mux instruction_mux_inst(
 
 alu_mux alu_mux_inst(
 	.aluSrc(wire_buffer_id_ex_o_aluSrc),
-    .i_read_data_2(wire_rb_read_data_2),
+    .i_read_data_2(wire_buffer_id_ex_o_read_rb_2),
     .i_immediate_extended_value(wire_buffer_id_ex_o_ext_sign),
     .result(wire_alu_mux_o_alu_data_2)
 );
