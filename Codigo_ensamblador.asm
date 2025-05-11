@@ -1,4 +1,4 @@
-sub	$20	$15	$9
+sub $20	$15	$9
 nop
 nop
 nop

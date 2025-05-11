@@ -4,30 +4,159 @@
 
 module unidad_de_control(
     input [5:0] op_code,
-    output reg mem_to_reg,
-    output reg mem_write_enable,
-    output reg mem_read_enable,
-    output reg [2:0] alu_op_code,
-    output reg reg_write
+    output reg branch,
+    output reg memRead,
+    output reg [2:0] aluOp,
+    output reg memWrite,
+    output reg aluSrc,
+    output reg regWrite,
+    output reg memToReg,
+    output reg regDst
 );
 
 always @* begin
     case (op_code)
         6'b000000:
         begin
-            mem_to_reg = 1'b0;
-            mem_write_enable = 1'b0;
-            mem_read_enable = 1'b0;
-            alu_op_code = 3'b010;
-            reg_write = 1'b1;
+            memToReg = 1'b0;
+            memWrite = 1'b0;
+            memRead = 1'b0;
+            aluOp = 3'b010;
+            regWrite = 1'b1;
+            branch = 1'b0;
+            aluSrc = 1'b0;
+            regDst = 1'b1;
+        end
+        //lw
+        6'b100011:
+        begin
+            memToReg = 1'b1;
+            memWrite = 1'b0;
+            memRead = 1'b1;
+            aluOp = 3'b000;
+            regWrite = 1'b1;
+            branch = 1'b0;
+            aluSrc = 1'b1;
+            regDst = 1'b0;
+        end
+        //sw
+        6'b101011:
+        begin
+            memToReg = 1'bx;
+            memWrite = 1'b1;
+            memRead = 1'b0;
+            aluOp = 3'b000;
+            regWrite = 1'b0;
+            branch = 1'b0;
+            aluSrc = 1'b1;
+            regDst = 1'bx;
+        end
+        //beq
+        6'b000100:
+        begin
+            memToReg = 1'bx;
+            memWrite = 1'b0;
+            memRead = 1'b0;
+            aluOp = 3'b001;
+            regWrite = 1'b0;
+            branch = 1'b1;
+            aluSrc = 1'b0;
+            regDst = 1'bx;
+        end
+        //bne
+        6'b000101:
+        begin
+            memToReg = 1'bx;
+            memWrite = 1'b0;
+            memRead = 1'b0;
+            aluOp = 3'b001;
+            regWrite = 1'b0;
+            branch = 1'b1;
+            aluSrc = 1'b0;
+            regDst = 1'bx;
+        end
+        //bgtz
+        6'b000111:
+        begin
+            memToReg = 1'bx;
+            memWrite = 1'b0;
+            memRead = 1'b0;
+            aluOp = 3'b001;
+            regWrite = 1'b0;
+            branch = 1'b1;
+            aluSrc = 1'b0;
+            regDst = 1'bx;
+        end
+        //addi
+        6'b001000:
+        begin
+            memToReg = 1'b0;
+            memWrite = 1'b0;
+            memRead = 1'b0;
+            aluOp = 3'b000;
+            regWrite = 1'b1;
+            branch = 1'b0;
+            aluSrc = 1'b1;
+            regDst = 1'b0;
+        end
+        //subi
+        6'b001001:
+        begin
+            memToReg = 1'b0;
+            memWrite = 1'b0;
+            memRead = 1'b0;
+            aluOp = 3'b001;
+            regWrite = 1'b1;
+            branch = 1'b0;
+            aluSrc = 1'b1;
+            regDst = 1'b0;
+        end
+        //andi
+        6'b001100:
+        begin
+            memToReg = 1'b0;
+            memWrite = 1'b0;
+            memRead = 1'b0;
+            aluOp = 3'b101;
+            regWrite = 1'b1;
+            branch = 1'b0;
+            aluSrc = 1'b1;
+            regDst = 1'b0;
+        end
+        //ori
+        6'b001101:
+        begin
+            memToReg = 1'b0;
+            memWrite = 1'b0;
+            memRead = 1'b0;
+            aluOp = 3'b011;
+            regWrite = 1'b1;
+            branch = 1'b0;
+            aluSrc = 1'b1;
+            regDst = 1'b0;
+        end
+        //slti
+        6'b001010:
+        begin
+            memToReg = 1'b0;
+            memWrite = 1'b0;
+            memRead = 1'b0;
+            aluOp = 3'b100;
+            regWrite = 1'b1;
+            branch = 1'b0;
+            aluSrc = 1'b1;
+            regDst = 1'b0;
         end
         default: 
         begin
-            mem_to_reg = 1'bx;
-            mem_write_enable = 1'bx;
-            mem_read_enable = 1'bx;
-            alu_op_code = 3'bxxx;
-            reg_write = 1'bx;
+            memToReg = 1'bx;
+            memWrite = 1'bx;
+            memRead = 1'bx;
+            aluOp = 3'bxxx;
+            regWrite = 1'bx;
+            branch = 1'bx;
+            aluSrc = 1'bx;
+            regDst = 1'bx;
         end
     endcase
 end

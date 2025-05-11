@@ -191,71 +191,87 @@ def decodificar():
     
     if not content_ensamblador.strip():
         archivo_vacio()
-
         return
          
-    diccionario_instruction ={
-        "and": 36, 
-        "or": 37, 
-        "add": 32, 
-        "sub": 34,
-        "nop": 0,
-        "j":2,
-        "slt": 42, 
-        "sw": 43, 
-        "lw": 35
+    diccionario_instruction = {
+        "and": 36, "or": 37, "add": 32, "sub": 34,
+        "nop": 0, "j": 2, "slt": 42, "sw": 43, 
+        "lw": 35, "addi": 8, "slti": 10, "andi": 12,
+        "ori": 13, "beq": 4
     }
 
-    diccionario_instruction_type ={
-        "and": "r", 
-        "or": "r", 
-        "add": "r",  
-        "sub": "r", 
-        "j": "j",
-        "slt": "r", 
-        "sw": "i", 
-        "lw": "i" 
+    diccionario_instruction_type = {
+        "and": "r", "or": "r", "add": "r", "sub": "r", 
+        "slt": "r", "sw": "i", "lw": "i", "addi": "i",
+        "slti": "i", "andi": "i", "ori": "i", "beq": "i",
+        "j": "j", "nop": "r"  # Añadido 'nop' como tipo R
     }
 
     lineas = content_ensamblador.split("\n")
     instrucciones_decodificadas = []
 
-    for i in lineas:
-        palabras = i.split('\t')
-        fila_decodificada = "";
-        if(diccionario_instruction_type.get(palabras[0]) == "r"):
-            print("Intruccion R: ")
-            print(palabras[0], palabras[1], palabras[2], palabras[3])
-            fila_decodificada += "000000"
-            fila_decodificada += format(int(palabras[2][1:]), '05b')
-            fila_decodificada += format(int(palabras[3][1:]), '05b')
-            fila_decodificada += format(int(palabras[1][1:]), '05b')
-            fila_decodificada += "00000"
-            fila_decodificada += str(format(diccionario_instruction.get(palabras[0], -1), '06b'))
+    for linea in lineas:
+        # Limpiar comentarios y espacios extra
+        linea = linea.split('#')[0].strip()  # Elimina comentarios
+        if not linea:  # Si la línea está vacía tras limpiar
+            instrucciones_decodificadas.append("00000000000000000000000000000000")
+            continue
 
-        elif(diccionario_instruction_type.get(palabras[0]) == "i"):
-            print("Intruccion I: ")
-            fila_decodificada += str(format(diccionario_instruction.get(palabras[0], -1), '06b'))
-            fila_decodificada += format(int(palabras[3][1:]), '05b')
-            fila_decodificada += format(int(palabras[1][1:]), '05b')
-            fila_decodificada += format(int(palabras[2][1:]), '016b')
-
-        elif(diccionario_instruction_type.get(palabras[0]) == "j"):
-            print("Intruccion J: ")
-            fila_decodificada += str(format(diccionario_instruction.get(palabras[0], -1), '06b'))
-            fila_decodificada += format(int(palabras[1][1:]), '026b')
-        else:
-            fila_decodificada += "00000000000000000000000000000000"
+        # Separar por espacios o comas, y eliminar cadenas vacías
+        palabras = [p.strip() for p in linea.replace(',', ' ').split() if p.strip()]
         
-        print(fila_decodificada + "\n")
+        if not palabras:  # Línea vacía
+            instrucciones_decodificadas.append("00000000000000000000000000000000")
+            continue
+
+        instruccion = palabras[0].lower()
+        tipo = diccionario_instruction_type.get(instruccion, None)
+        fila_decodificada = ""
+
+        if tipo == "r":
+            if instruccion == "nop":
+                fila_decodificada = "00000000000000000000000000000000"
+            else:
+                try:
+                    fila_decodificada += "000000"
+                    fila_decodificada += format(int(palabras[2][1:]), '05b')  # rs
+                    fila_decodificada += format(int(palabras[3][1:]), '05b')  # rt
+                    fila_decodificada += format(int(palabras[1][1:]), '05b')  # rd
+                    fila_decodificada += "00000"
+                    fila_decodificada += format(diccionario_instruction.get(instruccion, 0), '06b')  # funct
+                except (IndexError, ValueError) as e:
+                    print(f"Error en línea: {linea} - {e}")
+                    fila_decodificada = "00000000000000000000000000000000"
+
+        elif tipo == "i":
+            try:
+                fila_decodificada += format(diccionario_instruction.get(instruccion, 0), '06b')  # opcode
+                fila_decodificada += format(int(palabras[2][1:]), '05b')  # rs
+                fila_decodificada += format(int(palabras[1][1:]), '05b')  # rt
+                # Manejar inmediato (puede ser negativo)
+                inmediato = int(palabras[3])
+                fila_decodificada += format(inmediato & 0xFFFF, '016b')  # 16 bits con signo
+            except (IndexError, ValueError) as e:
+                print(f"Error en línea: {linea} - {e}")
+                fila_decodificada = "00000000000000000000000000000000"
+
+        elif tipo == "j":
+            try:
+                fila_decodificada += format(diccionario_instruction.get(instruccion, 0), '06b')  # opcode
+                fila_decodificada += format(int(palabras[1]), '026b')  # dirección
+            except (IndexError, ValueError) as e:
+                print(f"Error en línea: {linea} - {e}")
+                fila_decodificada = "00000000000000000000000000000000"
+        else:
+            fila_decodificada = "00000000000000000000000000000000"
+        
         instrucciones_decodificadas.append(fila_decodificada)
 
+    # Escribir en el archivo (4 líneas de 8 bits cada una)
     with open('instrucciones.txt', 'w') as archivo:
         for item in instrucciones_decodificadas:
-            archivo.write(item[0:8] + "\n")
-            archivo.write(item[8:16] + "\n")
-            archivo.write(item[16:24] + "\n")
-            archivo.write(item[24:32] + "\n")
+            for i in range(0, 32, 8):
+                archivo.write(item[i:i+8] + "\n")
             
     mostrar_exito()
     
