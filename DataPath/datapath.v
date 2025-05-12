@@ -35,6 +35,7 @@ wire [4:0]  wire_buffer_ex_mem_o_inst_mux_br_write_address;
 wire wire_buffer_ex_mem_o_zf;
 wire wire_buffer_ex_mem_o_branch;
 wire wire_buffer_ex_mem_o_memWrite;
+wire wire_buffer_ex_mem_o_memRead;
 wire wire_buffer_ex_mem_o_regWrite;
 wire wire_buffer_ex_mem_o_memToReg;
 
@@ -150,6 +151,7 @@ buffer_ex_mem buffer_ex_mem_inst(
 	.i_zf(wire_alu_zflag),
 	.i_branch(wire_buffer_id_ex_o_branch),
 	.i_memWrite(wire_buffer_id_ex_o_memWrite),
+	.i_memRead(wire_buffer_id_ex_o_memRead),
 	.i_regWrite(wire_buffer_id_ex_o_regWrite),
 	.i_memToReg(wire_buffer_id_ex_o_memToReg),
 	.o_alu_result(wire_buffer_ex_mem_o_alu_result),
@@ -159,6 +161,7 @@ buffer_ex_mem buffer_ex_mem_inst(
 	.o_zf(wire_buffer_ex_mem_o_zf),
 	.o_branch(wire_buffer_ex_mem_o_branch),
 	.o_memWrite(wire_buffer_ex_mem_o_memWrite),
+	.o_memRead(wire_buffer_ex_mem_o_memRead),
 	.o_regWrite(wire_buffer_ex_mem_o_regWrite),
 	.o_memToReg(wire_buffer_ex_mem_o_memToReg)
 );
@@ -184,14 +187,14 @@ sum_pc sum_pc_inst(
 
 sum_ALU sum_ALU_inst(
 	.i_pc_address(wire_buffer_id_ex_o_address_pc),               
-    .i_shifted_value(wire_ext_sign_o_inmediate_extended_value),
+    .i_shifted_value(wire_shift_left_o_shifted_value),
     .o_branch_address(wire_sum_alu_o_branch_address)  
 );
 
 buffer_contador_de_programa buffer_contador_de_programa_inst(
 	.clk(clk),
 	.reset(reset),
-    .i_data(wire_sum_pc_o_address_pc),
+    .i_data(wire_pc_mux_o_result_pc_address),
 	.o_data(wire_buffer_pc_o_data)
 );
 
@@ -250,13 +253,13 @@ unidad_de_control_alu unidad_de_control_alu_inst(
 ram ram_inst(
 	.address(wire_buffer_ex_mem_o_alu_result),
 	.din(wire_buffer_ex_mem_o_read_rb_2),
-	.write_enable(wire_cu_mem_write_enable),
-    .read_enable(wire_cu_mem_read_enable),
+	.write_enable(wire_buffer_ex_mem_o_memWrite),
+    .read_enable(wire_buffer_ex_mem_o_memRead),
 	.dout(wire_ram_dout)
 );
 
 multiplexor multiplexor_inst(
-	.selector(wire_cu_mem_to_reg),
+	.selector(wire_buffer_mem_wb_o_memToReg),
     .i_ram(wire_buffer_mem_wb_o_ram_data),
     .i_alu(wire_buffer_mem_wb_o_alu_result),
     .result(wire_mux_out)
@@ -277,17 +280,16 @@ alu_mux alu_mux_inst(
 );
 
 gate_and_branch gate_and_branch_inst(
-	.branch(wire_cu_o_branch),
-    .ZF(wire_alu_zflag),
+	.branch(wire_buffer_ex_mem_o_branch),
+    .ZF(wire_buffer_ex_mem_o_zf),
     .result(wire_and_branch_result)
 );
 
 pc_mux pc_mux_inst(
 	.selector(wire_and_branch_result),
-	.i_pc_value(wire_buffer_ex_mem_o_branch_address),
-	.i_sum_alu_result(wire_sum_alu_o_branch_address),
+	.i_pc_value(wire_sum_pc_o_address_pc),
+	.i_sum_alu_result(wire_buffer_ex_mem_o_branch_address),
 	.o_result_pc_address(wire_pc_mux_o_result_pc_address)
 );
- 
-	
+
 endmodule
