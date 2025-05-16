@@ -10,3 +10,5 @@ ori  $9, $0, 11     # $9 = $0(10) OR 11
 andi $10, $1, 10    # $10 = $1 AND 10
 sw   $1, $4, 5      # Guardar a la ram $1 en Mem[$4 + 5]
 lw   $22, $4, 5     # Guardar al banco de registros la dirección Mem[$4 + 5] de la ram
+j    1
+nop

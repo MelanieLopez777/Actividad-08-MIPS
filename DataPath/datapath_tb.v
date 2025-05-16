@@ -4,14 +4,12 @@
 
 module datapath_tb();
 
-wire zflag_tb;
 reg clk;
 reg reset;
 
 datapath datapath_inst(
 	.clk(clk),
-	.reset(reset),
-	.Zflag(zflag_tb)
+	.reset(reset)
 );
 
 initial begin

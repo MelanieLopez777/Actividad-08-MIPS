@@ -27,4 +27,4 @@ always @* begin
 		ZF = 1'b0;
 	end
 end
- endmodule
+endmodule

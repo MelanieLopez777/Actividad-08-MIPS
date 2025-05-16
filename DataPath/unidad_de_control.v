@@ -11,7 +11,8 @@ module unidad_de_control(
     output reg aluSrc,
     output reg regWrite,
     output reg memToReg,
-    output reg regDst
+    output reg regDst,
+    output reg jump
 );
 
 always @* begin
@@ -26,6 +27,7 @@ always @* begin
             branch = 1'b0;
             aluSrc = 1'b0;
             regDst = 1'b1;
+            jump = 1'b0;
         end
         //lw
         6'b100011:
@@ -38,6 +40,7 @@ always @* begin
             branch = 1'b0;
             aluSrc = 1'b1;
             regDst = 1'b0;
+            jump = 1'b0;
         end
         //sw
         6'b101011:
@@ -50,6 +53,7 @@ always @* begin
             branch = 1'b0;
             aluSrc = 1'b1;
             regDst = 1'bx;
+            jump = 1'b0;
         end
         //beq
         6'b000100:
@@ -62,6 +66,7 @@ always @* begin
             branch = 1'b1;
             aluSrc = 1'b0;
             regDst = 1'bx;
+            jump = 1'b0;
         end
         //bne
         6'b000101:
@@ -74,6 +79,7 @@ always @* begin
             branch = 1'b1;
             aluSrc = 1'b0;
             regDst = 1'bx;
+            jump = 1'b0;
         end
         //bgtz
         6'b000111:
@@ -86,6 +92,7 @@ always @* begin
             branch = 1'b1;
             aluSrc = 1'b0;
             regDst = 1'bx;
+            jump = 1'b0;
         end
         //addi
         6'b001000:
@@ -98,6 +105,7 @@ always @* begin
             branch = 1'b0;
             aluSrc = 1'b1;
             regDst = 1'b0;
+            jump = 1'b0;
         end
         //andi
         6'b001100:
@@ -110,6 +118,7 @@ always @* begin
             branch = 1'b0;
             aluSrc = 1'b1;
             regDst = 1'b0;
+            jump = 1'b0;
         end
         //ori
         6'b001101:
@@ -122,6 +131,7 @@ always @* begin
             branch = 1'b0;
             aluSrc = 1'b1;
             regDst = 1'b0;
+            jump = 1'b0;
         end
         //slti
         6'b001010:
@@ -134,6 +144,20 @@ always @* begin
             branch = 1'b0;
             aluSrc = 1'b1;
             regDst = 1'b0;
+            jump = 1'b0;
+        end
+        // j
+        6'b000010:
+        begin
+            memToReg = 1'bx;
+            memWrite = 1'bx;
+            memRead = 1'bx;
+            aluOp = 3'bxxx;
+            regWrite = 1'b0;
+            branch = 1'b0;
+            aluSrc = 1'bx;
+            regDst = 1'bx;
+            jump = 1'b1;
         end
         default: 
         begin

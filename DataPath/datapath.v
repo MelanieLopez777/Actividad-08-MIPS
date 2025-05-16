@@ -4,9 +4,9 @@
 
 module datapath (
 	input wire clk,
-	input wire reset,
-	output Zflag
+	input wire reset
 );
+
 
 // Cables Buffers
 wire [31:0] wire_buffer_if_id_o_instruction;
@@ -18,6 +18,7 @@ wire [4:0]  wire_buffer_id_ex_o_rt;
 wire [4:0]  wire_buffer_id_ex_o_rd;
 wire [31:0] wire_buffer_id_ex_o_address_pc;
 wire [31:0] wire_buffer_id_ex_o_ext_sign;
+wire [31:0] wire_buffer_id_ex_o_jump_address;
 wire wire_buffer_id_ex_o_branch;
 wire wire_buffer_id_ex_o_memRead;
 wire [2:0] wire_buffer_id_ex_o_aluOp;
@@ -26,18 +27,21 @@ wire wire_buffer_id_ex_o_aluSrc;
 wire wire_buffer_id_ex_o_regWrite;
 wire wire_buffer_id_ex_o_memToReg;
 wire wire_buffer_id_ex_o_regDst;
+wire wire_buffer_id_ex_o_jump;
 
 
 wire [31:0] wire_buffer_ex_mem_o_alu_result;
 wire [31:0] wire_buffer_ex_mem_o_read_rb_2;
 wire [31:0] wire_buffer_ex_mem_o_branch_address;
 wire [4:0]  wire_buffer_ex_mem_o_inst_mux_br_write_address;
+wire [31:0] wire_buffer_ex_mem_o_jump_address;
 wire wire_buffer_ex_mem_o_zf;
 wire wire_buffer_ex_mem_o_branch;
 wire wire_buffer_ex_mem_o_memWrite;
 wire wire_buffer_ex_mem_o_memRead;
 wire wire_buffer_ex_mem_o_regWrite;
 wire wire_buffer_ex_mem_o_memToReg;
+wire wire_buffer_ex_mem_o_jump;
 
 wire [31:0] wire_buffer_mem_wb_o_ram_data;
 wire [31:0] wire_buffer_mem_wb_o_alu_result;
@@ -58,6 +62,7 @@ wire wire_cu_o_memWrite;
 wire wire_cu_o_memToReg;
 wire wire_cu_o_regWrite;
 wire wire_cu_o_regDst;
+wire wire_cu_o_jump;
 
 // Cables banco de registros
 wire [31:0] wire_rb_read_data_1;
@@ -101,6 +106,11 @@ wire wire_and_branch_result;
 // Cables pc mux
 wire [31:0] wire_pc_mux_o_result_pc_address;
 
+// Cables mux tipo j
+wire [31:0] wire_mux_tipo_j_o_result_pc_address;
+
+// Cables shift left 2 tipo j
+wire [27:0] wire_shift_left2_tipo_j_o_shifted_value_jump;
 
 buffer_if_id buffer_if_id_inst(
 	.clk(clk),
@@ -118,6 +128,7 @@ buffer_id_ex buffer_id_ex_inst(
 	.i_rd(wire_buffer_if_id_o_instruction[15:11]),
 	.i_address_pc(wire_buffer_if_id_o_address_pc),
 	.i_ext_sign(wire_ext_sign_o_inmediate_extended_value),
+	.i_jump_address({wire_buffer_if_id_o_address_pc[31:28], wire_shift_left2_tipo_j_o_shifted_value_jump}),
 	.i_branch(wire_cu_o_branch),
 	.i_memRead(wire_cu_o_memRead),
 	.i_aluOp(wire_cu_o_aluOp),
@@ -126,12 +137,14 @@ buffer_id_ex buffer_id_ex_inst(
 	.i_regWrite(wire_cu_o_regWrite),
 	.i_memToReg(wire_cu_o_memToReg),
 	.i_regDst(wire_cu_o_regDst),
+	.i_jump(wire_cu_o_jump),
 	.o_read_rb_1(wire_buffer_id_ex_o_read_rb_1),
 	.o_read_rb_2(wire_buffer_id_ex_o_read_rb_2),
 	.o_rt(wire_buffer_id_ex_o_rt),
 	.o_rd(wire_buffer_id_ex_o_rd),
 	.o_address_pc(wire_buffer_id_ex_o_address_pc),
 	.o_ext_sign(wire_buffer_id_ex_o_ext_sign),
+	.o_jump_address(wire_buffer_id_ex_o_jump_address),
 	.o_branch(wire_buffer_id_ex_o_branch),
 	.o_memRead(wire_buffer_id_ex_o_memRead),
 	.o_aluOp(wire_buffer_id_ex_o_aluOp),
@@ -139,7 +152,8 @@ buffer_id_ex buffer_id_ex_inst(
 	.o_aluSrc(wire_buffer_id_ex_o_aluSrc),
 	.o_regWrite(wire_buffer_id_ex_o_regWrite),
 	.o_memToReg(wire_buffer_id_ex_o_memToReg),
-	.o_regDst(wire_buffer_id_ex_o_regDst)
+	.o_regDst(wire_buffer_id_ex_o_regDst),
+	.o_jump(wire_buffer_id_ex_o_jump)
 );
 
 buffer_ex_mem buffer_ex_mem_inst(
@@ -148,22 +162,26 @@ buffer_ex_mem buffer_ex_mem_inst(
 	.i_read_rb_2(wire_buffer_id_ex_o_read_rb_2),
 	.i_branch_address(wire_sum_alu_o_branch_address),
 	.i_inst_mux_br_write_address(wire_inst_mux_o_br_write_address),
+	.i_jump_address(wire_buffer_id_ex_o_jump_address),
 	.i_zf(wire_alu_zflag),
 	.i_branch(wire_buffer_id_ex_o_branch),
 	.i_memWrite(wire_buffer_id_ex_o_memWrite),
 	.i_memRead(wire_buffer_id_ex_o_memRead),
 	.i_regWrite(wire_buffer_id_ex_o_regWrite),
 	.i_memToReg(wire_buffer_id_ex_o_memToReg),
+	.i_jump(wire_buffer_id_ex_o_jump),
 	.o_alu_result(wire_buffer_ex_mem_o_alu_result),
 	.o_read_rb_2(wire_buffer_ex_mem_o_read_rb_2),
 	.o_branch_address(wire_buffer_ex_mem_o_branch_address),
 	.o_inst_mux_br_write_address(wire_buffer_ex_mem_o_inst_mux_br_write_address),
+	.o_jump_address(wire_buffer_ex_mem_o_jump_address),
 	.o_zf(wire_buffer_ex_mem_o_zf),
 	.o_branch(wire_buffer_ex_mem_o_branch),
 	.o_memWrite(wire_buffer_ex_mem_o_memWrite),
 	.o_memRead(wire_buffer_ex_mem_o_memRead),
 	.o_regWrite(wire_buffer_ex_mem_o_regWrite),
-	.o_memToReg(wire_buffer_ex_mem_o_memToReg)
+	.o_memToReg(wire_buffer_ex_mem_o_memToReg),
+	.o_jump(wire_buffer_ex_mem_o_jump)
 );
 
 buffer_mem_wb buffer_mem_wb_inst(
@@ -194,7 +212,7 @@ sum_ALU sum_ALU_inst(
 buffer_contador_de_programa buffer_contador_de_programa_inst(
 	.clk(clk),
 	.reset(reset),
-    .i_data(wire_pc_mux_o_result_pc_address),
+    .i_data(wire_mux_tipo_j_o_result_pc_address),
 	.o_data(wire_buffer_pc_o_data)
 );
 
@@ -212,7 +230,8 @@ unidad_de_control unidad_de_control_inst(
 	.aluSrc(wire_cu_o_aluSrc),
     .regWrite(wire_cu_o_regWrite),
     .memToReg(wire_cu_o_memToReg),
-	.regDst(wire_cu_o_regDst)
+	.regDst(wire_cu_o_regDst),
+	.jump(wire_cu_o_jump)
 );
 
 banco_de_registros banco_de_registros_inst
@@ -290,6 +309,18 @@ pc_mux pc_mux_inst(
 	.i_pc_value(wire_sum_pc_o_address_pc),
 	.i_sum_alu_result(wire_buffer_ex_mem_o_branch_address),
 	.o_result_pc_address(wire_pc_mux_o_result_pc_address)
+);
+
+multiplexor_tipo_j multiplexor_tipo_j_inst(
+	.i_selector(wire_buffer_ex_mem_o_jump),
+	.i_jump_address(wire_buffer_ex_mem_o_jump_address),
+	.i_branch_address_pc(wire_pc_mux_o_result_pc_address),
+	.o_mux_pc_address(wire_mux_tipo_j_o_result_pc_address)
+);
+
+shift_left2_tipo_j shift_left2_tipo_j_inst(
+	.i_shifted_value_jump(wire_buffer_if_id_o_instruction[25:0]),
+	.o_shifted_value_jump(wire_shift_left2_tipo_j_o_shifted_value_jump)
 );
 
 endmodule
