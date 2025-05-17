@@ -11,8 +11,8 @@ module buffer_if_id (
 );
 
 always @(posedge clk) begin
-	o_address_pc = i_address_pc;
-	o_instruction = i_instruction;
+	o_address_pc <= i_address_pc;
+	o_instruction <= i_instruction;
 end
     
 endmodule

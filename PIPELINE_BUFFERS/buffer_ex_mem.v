@@ -31,18 +31,18 @@ module buffer_ex_mem (
 );
 
 always @(posedge clk) begin
-	o_alu_result = i_alu_result;
-	o_read_rb_2 = i_read_rb_2;
+	o_alu_result <= i_alu_result;
+	o_read_rb_2 <= i_read_rb_2;
 	o_branch_address = i_branch_address;
-	o_inst_mux_br_write_address = i_inst_mux_br_write_address;
-	o_zf = i_zf;
-	o_branch = i_branch;
-	o_memWrite = i_memWrite;
-	o_memRead = i_memRead;
-	o_regWrite = i_regWrite;
-	o_memToReg = i_memToReg;
-	o_jump = i_jump;
-	o_jump_address = i_jump_address;
+	o_inst_mux_br_write_address <= i_inst_mux_br_write_address;
+	o_zf <= i_zf;
+	o_branch <= i_branch;
+	o_memWrite <= i_memWrite;
+	o_memRead <= i_memRead;
+	o_regWrite <= i_regWrite;
+	o_memToReg <= i_memToReg;
+	o_jump <= i_jump;
+	o_jump_address <= i_jump_address;
 end
 
 endmodule

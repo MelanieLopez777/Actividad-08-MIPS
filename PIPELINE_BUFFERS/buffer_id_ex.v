@@ -39,22 +39,22 @@ module buffer_id_ex (
 );
 	
 always @(posedge clk) begin
-	o_read_rb_1 =  i_read_rb_1;  
-	o_read_rb_2 = i_read_rb_2;
-	o_rt = i_rt;
-	o_rd = i_rd;
-	o_address_pc = i_address_pc;
-	o_ext_sign = i_ext_sign;
-	o_branch = i_branch;
-	o_memRead = i_memRead;
-	o_aluOp = i_aluOp;
-	o_memWrite = i_memWrite;
-	o_aluSrc = i_aluSrc;
-	o_regWrite = i_regWrite;
-	o_memToReg = i_memToReg;
-	o_regDst = i_regDst;
-	o_jump = i_jump;
-	o_jump_address = i_jump_address;
+	o_read_rb_1 <=  i_read_rb_1;  
+	o_read_rb_2 <= i_read_rb_2;
+	o_rt <= i_rt;
+	o_rd <= i_rd;
+	o_address_pc <= i_address_pc;
+	o_ext_sign <= i_ext_sign;
+	o_branch <= i_branch;
+	o_memRead <= i_memRead;
+	o_aluOp <= i_aluOp;
+	o_memWrite <= i_memWrite;
+	o_aluSrc <= i_aluSrc;
+	o_regWrite <= i_regWrite;
+	o_memToReg <= i_memToReg;
+	o_regDst <= i_regDst;
+	o_jump <= i_jump;
+	o_jump_address <= i_jump_address;
 end
 
 endmodule

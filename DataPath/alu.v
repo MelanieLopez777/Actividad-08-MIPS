@@ -18,6 +18,7 @@ always @* begin
  		4'b0110: result_alu = din1_alu - din2_alu;
  		4'b0111: result_alu = (din1_alu < din2_alu)?32'd1:32'd0;
  		4'b1100: result_alu = ~(din1_alu | din2_alu);
+		4'b1111: result_alu = din2_alu << 1;
  	endcase
 	
 	if (result_alu == 32'b00000000000000000000000000000000) begin

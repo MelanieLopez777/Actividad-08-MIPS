@@ -18,11 +18,11 @@ module buffer_mem_wb (
 );
 
 always @(posedge clk) begin
-	o_ram_data = i_ram_data;
-	o_alu_result = i_alu_result;
-	o_inst_mux_br_write_address = i_inst_mux_br_write_address;
-	o_regWrite = i_regWrite;
-	o_memToReg = i_memToReg;
+	o_ram_data <= i_ram_data;
+	o_alu_result <= i_alu_result;
+	o_inst_mux_br_write_address <= i_inst_mux_br_write_address;
+	o_regWrite <= i_regWrite;
+	o_memToReg <= i_memToReg;
 end
 
 endmodule

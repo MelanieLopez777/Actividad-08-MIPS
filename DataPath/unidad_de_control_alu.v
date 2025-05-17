@@ -12,6 +12,7 @@ always @* begin
 	case (alu_op)
 		3'b000: alu_code = 4'b0010;
 		3'b001: alu_code = 4'b0110;
+		// SLTI
 		3'b100: alu_code = 4'b0111;
 		3'b101: alu_code = 4'b0000;
 		3'b011: alu_code = 4'b0001;
@@ -24,6 +25,7 @@ always @* begin
 				6'b100101: alu_code = 4'b0001; // OR
 				6'b100111: alu_code = 4'b1100; // NOR
 				6'b101010: alu_code = 4'b0111; // SLT
+				6'b000000: alu_code = 4'b1111; // SLL
 				default:
 					alu_code = 4'bxxxx;
 			endcase
