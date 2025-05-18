@@ -3,14 +3,18 @@ lw   $3, $1, 8   # Cargo el numero de chars, en este caso 3 - 1
 addi $1, $1, 14  # Sumar 10 al 4 para poder cargar los caracteres
 nop
 nop
+nop
 lbu  $5, $1, 0   # Cargo la letra en ascci
 sll  $6, $2, 5
+nop
 nop
 nop
 add  $6, $6, $2
 nop
 nop
+nop
 add  $6, $6, $5
+nop
 nop
 nop
 beq  $4, $3, 5

@@ -34,7 +34,7 @@ always @* begin
         begin
             memToReg = 1'b1;
             memWrite = 2'bxx;
-            memRead = 2'b00;
+            memRead = 1'b1;
             aluOp = 3'b000;
             regWrite = 1'b1;
             branch = 1'b0;
