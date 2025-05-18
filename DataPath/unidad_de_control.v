@@ -120,32 +120,6 @@ always @* begin
             regDst = 1'bx;
             jump = 1'b0;
         end
-        //bne
-        6'b000101:
-        begin
-            memToReg = 1'bx;
-            memWrite = 1'b0;
-            memRead = 2'bxx;
-            aluOp = 3'b001;
-            regWrite = 1'b0;
-            branch = 1'b1;
-            aluSrc = 1'b0;
-            regDst = 1'bx;
-            jump = 1'b0;
-        end
-        //bgtz
-        6'b000111:
-        begin
-            memToReg = 1'bx;
-            memWrite = 1'b0;
-            memRead = 2'bxx;
-            aluOp = 3'b001;
-            regWrite = 1'b0;
-            branch = 1'b1;
-            aluSrc = 1'b0;
-            regDst = 1'bx;
-            jump = 1'b0;
-        end
         //addi
         6'b001000:
         begin

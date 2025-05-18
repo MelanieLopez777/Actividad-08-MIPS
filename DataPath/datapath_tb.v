@@ -14,6 +14,7 @@ datapath datapath_inst(
 
 initial begin
 	$readmemb("./datos_banco_de_registros.txt", datapath_inst.banco_de_registros_inst.mem);
+	$readmemb("./datos_ram.txt", datapath_inst.ram_inst.mem);
 end
 
 initial begin

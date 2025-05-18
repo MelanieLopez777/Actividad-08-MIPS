@@ -14,7 +14,3 @@ ori  $9, $0, 11     # $9 = $0(10) OR 11
 andi $10, $1, 10    # $10 = $1 AND 10
 sw   $1, $4, 4      # Guardar a la ram $1 en Mem[$4 + 5(24/4)]
 lw   $22, $4, 5     # Guardar al banco de registros la dirección Mem[$4 + 5] de la ram
-sb   $11, $7, 0     # Guarda del 320 un 64 en la direccion de memoria 5 de la bram
-lbu  $12, $7, 0     # Guarda 64 en la 12
-j    1
-nop
