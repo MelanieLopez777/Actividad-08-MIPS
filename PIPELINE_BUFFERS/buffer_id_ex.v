@@ -4,6 +4,7 @@
 
 module buffer_id_ex (
 	input clk,
+	input [4:0] i_shamt,
 	input [31:0] i_read_rb_1,
 	input [31:0] i_read_rb_2,
 	input [4:0]  i_rt,
@@ -12,7 +13,7 @@ module buffer_id_ex (
 	input [31:0] i_ext_sign,
 	input [31:0] i_jump_address,
 	input i_branch,
-	input i_memRead,
+	input [1:0] i_memRead,
 	input [2:0] i_aluOp,
 	input i_memWrite,
 	input i_aluSrc,
@@ -20,6 +21,8 @@ module buffer_id_ex (
 	input i_memToReg,
 	input i_regDst,
 	input i_jump,
+	input [5:0] i_opcode,
+	output reg [4:0] o_shamt,
 	output reg [31:0] o_read_rb_1,
 	output reg [31:0] o_read_rb_2,
 	output reg [4:0]  o_rt,
@@ -28,17 +31,19 @@ module buffer_id_ex (
 	output reg [31:0] o_ext_sign,
 	output reg [31:0] o_jump_address,
 	output reg o_branch,
-	output reg o_memRead,
+	output reg [1:0] o_memRead,
 	output reg [2:0] o_aluOp,
 	output reg o_memWrite,
 	output reg o_aluSrc,
 	output reg o_regWrite,
 	output reg o_memToReg,
 	output reg o_regDst,
-	output reg o_jump
+	output reg o_jump,
+	output reg [5:0] o_opcode
 );
 	
 always @(posedge clk) begin
+	o_shamt <= i_shamt;
 	o_read_rb_1 <=  i_read_rb_1;  
 	o_read_rb_2 <= i_read_rb_2;
 	o_rt <= i_rt;
@@ -55,6 +60,7 @@ always @(posedge clk) begin
 	o_regDst <= i_regDst;
 	o_jump <= i_jump;
 	o_jump_address <= i_jump_address;
+	o_opcode <= i_opcode;
 end
 
 endmodule

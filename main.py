@@ -195,16 +195,17 @@ def decodificar():
          
     diccionario_instruction = {
         "and": 36, "or": 37, "add": 32, "sub": 34,
-        "nop": 0, "j": 2, "slt": 42, "sw": 43, 
-        "lw": 35, "addi": 8, "slti": 10, "andi": 12,
+        "nop": 0, "sll": 0, "j": 2, "slt": 42, "sw": 43, "sb": 40,
+        "sh": 41, "lw": 35, "lb": 32, "lbu": 36, "addi": 8, "slti": 10, "andi": 12,
         "ori": 13, "beq": 4
     }
 
     diccionario_instruction_type = {
         "and": "r", "or": "r", "add": "r", "sub": "r", 
-        "slt": "r", "sw": "i", "lw": "i", "addi": "i",
+        "slt": "r", "sw": "i", "sb": "i", "sh": "i",
+        "lb": "i", "lbu": "i", "lw": "i", "addi": "i",
         "slti": "i", "andi": "i", "ori": "i", "beq": "i",
-        "j": "j", "nop": "r"  # Añadido 'nop' como tipo R
+        "j": "j", "nop": "r", "sll": "r"
     }
 
     lineas = content_ensamblador.split("\n")
@@ -231,6 +232,13 @@ def decodificar():
         if tipo == "r":
             if instruccion == "nop":
                 fila_decodificada = "00000000000000000000000000000000"
+            elif instruccion == "sll":
+                fila_decodificada += "000000"
+                fila_decodificada += "00000"
+                fila_decodificada += format(int(palabras[2][1:]), '05b')  # rt
+                fila_decodificada += format(int(palabras[1][1:]), '05b')  # rd
+                fila_decodificada += format(int(palabras[3]), '05b')      # sa
+                fila_decodificada += format(diccionario_instruction.get(instruccion, 0), '06b')  # funct
             else:
                 try:
                     fila_decodificada += "000000"

@@ -11,7 +11,7 @@ module banco_de_registros (
     output [31:0] read_data_1,
     output [31:0] read_data_2
 );
-reg [31:0] mem [0:999];
+reg [31:0] mem [0:31];
 
 assign read_data_1 = mem[read_reg_1];
 assign read_data_2 = mem[read_reg_2];

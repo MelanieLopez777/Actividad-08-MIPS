@@ -12,10 +12,11 @@ module buffer_ex_mem (
 	input i_zf,
 	input i_branch,
 	input i_memWrite,
-	input i_memRead,
+	input [1:0] i_memRead,
 	input i_regWrite,
 	input i_memToReg,
 	input i_jump,
+	input [5:0] i_opcode,
 	output reg [31:0] o_alu_result,
 	output reg [31:0] o_read_rb_2,
 	output reg [31:0] o_branch_address,
@@ -24,10 +25,11 @@ module buffer_ex_mem (
 	output reg o_zf,
 	output reg o_branch,
 	output reg o_memWrite,
-	output reg o_memRead,
+	output reg [1:0] o_memRead,
 	output reg o_regWrite,
 	output reg o_memToReg,
-	output reg o_jump
+	output reg o_jump,
+	output reg [5:0] o_opcode
 );
 
 always @(posedge clk) begin
@@ -43,6 +45,7 @@ always @(posedge clk) begin
 	o_memToReg <= i_memToReg;
 	o_jump <= i_jump;
 	o_jump_address <= i_jump_address;
+	o_opcode <= i_opcode;
 end
 
 endmodule

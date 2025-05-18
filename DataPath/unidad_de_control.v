@@ -5,7 +5,7 @@
 module unidad_de_control(
     input [5:0] op_code,
     output reg branch,
-    output reg memRead,
+    output reg [1:0] memRead,
     output reg [2:0] aluOp,
     output reg memWrite,
     output reg aluSrc,
@@ -21,7 +21,7 @@ always @* begin
         begin
             memToReg = 1'b0;
             memWrite = 1'b0;
-            memRead = 1'b0;
+            memRead = 2'bxx;
             aluOp = 3'b010;
             regWrite = 1'b1;
             branch = 1'b0;
@@ -33,7 +33,7 @@ always @* begin
         6'b100011:
         begin
             memToReg = 1'b1;
-            memWrite = 1'b0;
+            memWrite = 2'bxx;
             memRead = 1'b1;
             aluOp = 3'b000;
             regWrite = 1'b1;
@@ -47,7 +47,7 @@ always @* begin
         begin
             memToReg = 1'bx;
             memWrite = 1'b1;
-            memRead = 1'b0;
+            memRead = 2'bxx;
             aluOp = 3'b000;
             regWrite = 1'b0;
             branch = 1'b0;
@@ -55,12 +55,64 @@ always @* begin
             regDst = 1'bx;
             jump = 1'b0;
         end
+        // sb
+        6'b101000:
+        begin
+            memToReg = 1'bx;
+            memWrite = 1'b1;
+            memRead = 2'bxx;
+            aluOp = 3'b000;
+            regWrite = 1'b0;
+            branch = 1'b0;
+            aluSrc = 1'b1;
+            regDst = 1'bx;
+            jump = 1'b0;
+        end
+        // sh
+        6'b101001:
+        begin
+            memToReg = 1'bx;
+            memWrite = 1'b1;
+            memRead = 2'bxx;
+            aluOp = 3'b000;
+            regWrite = 1'b0;
+            branch = 1'b0;
+            aluSrc = 1'b1;
+            regDst = 1'bx;
+            jump = 1'b0;
+        end
+        // lb
+        6'b100000:
+        begin
+            memToReg = 1'b1;
+            memWrite = 1'b0;
+            memRead = 2'b01;
+            aluOp = 3'b000;
+            regWrite = 1'b1;
+            branch = 1'b0;
+            aluSrc = 1'b1;
+            regDst = 1'b0;
+            jump = 1'b0;
+        end
+        // lbu
+        6'b100100:
+        begin
+            memToReg = 1'b1;
+            memWrite = 1'b0;
+            memRead = 2'b10;
+            aluOp = 3'b000;
+            regWrite = 1'b1;
+            branch = 1'b0;
+            aluSrc = 1'b1;
+            regDst = 1'b0;
+            jump = 1'b0;
+        end
         //beq
         6'b000100:
         begin
             memToReg = 1'bx;
             memWrite = 1'b0;
-            memRead = 1'b0;
+            memRead = 2'bxx;
             aluOp = 3'b001;
             regWrite = 1'b0;
             branch = 1'b1;
@@ -73,7 +125,7 @@ always @* begin
         begin
             memToReg = 1'bx;
             memWrite = 1'b0;
-            memRead = 1'b0;
+            memRead = 2'bxx;
             aluOp = 3'b001;
             regWrite = 1'b0;
             branch = 1'b1;
@@ -86,7 +138,7 @@ always @* begin
         begin
             memToReg = 1'bx;
             memWrite = 1'b0;
-            memRead = 1'b0;
+            memRead = 2'bxx;
             aluOp = 3'b001;
             regWrite = 1'b0;
             branch = 1'b1;
@@ -99,7 +151,7 @@ always @* begin
         begin
             memToReg = 1'b0;
             memWrite = 1'b0;
-            memRead = 1'b0;
+            memRead = 2'bxx;
             aluOp = 3'b000;
             regWrite = 1'b1;
             branch = 1'b0;
@@ -112,7 +164,7 @@ always @* begin
         begin
             memToReg = 1'b0;
             memWrite = 1'b0;
-            memRead = 1'b0;
+            memRead = 2'bxx;
             aluOp = 3'b101;
             regWrite = 1'b1;
             branch = 1'b0;
@@ -125,7 +177,7 @@ always @* begin
         begin
             memToReg = 1'b0;
             memWrite = 1'b0;
-            memRead = 1'b0;
+            memRead = 2'bxx;
             aluOp = 3'b011;
             regWrite = 1'b1;
             branch = 1'b0;
@@ -138,7 +190,7 @@ always @* begin
         begin
             memToReg = 1'b0;
             memWrite = 1'b0;
-            memRead = 1'b0;
+            memRead = 2'bxx;
             aluOp = 3'b100;
             regWrite = 1'b1;
             branch = 1'b0;
@@ -151,7 +203,7 @@ always @* begin
         begin
             memToReg = 1'bx;
             memWrite = 1'bx;
-            memRead = 1'bx;
+            memRead = 2'bxx;
             aluOp = 3'bxxx;
             regWrite = 1'b0;
             branch = 1'b0;
@@ -163,12 +215,13 @@ always @* begin
         begin
             memToReg = 1'bx;
             memWrite = 1'bx;
-            memRead = 1'bx;
+            memRead = 2'bxx;
             aluOp = 3'bxxx;
             regWrite = 1'bx;
             branch = 1'bx;
             aluSrc = 1'bx;
             regDst = 1'bx;
+            jump = 1'bx;
         end
     endcase
 end
