@@ -288,6 +288,141 @@ def decodificar():
     else:
         mostrar_boton_decodificado()
 
+def generar_datos_br():
+    """Muestra una ventana para ingresar datos y genera el archivo Datos_BR.txt"""
+    ventana_datos = Toplevel(root)
+    ventana_datos.title("Generar Datos para BR")
+    ventana_datos.geometry("500x500")
+    ventana_datos.resizable(False, False)
+    ventana_datos.configure(bg=COLORES['fondo'])
+    ventana_datos.grab_set()
+
+    estilos = crear_estilos()
+
+    # Frame principal
+    frame_principal = Frame(ventana_datos, **estilos['frame'])
+    frame_principal.pack(pady=20, fill=BOTH, expand=True)
+
+    # Frame para el nombre del archivo (ahora arriba)
+    frame_nombre = Frame(frame_principal, bg=COLORES['fondo'])
+    frame_nombre.pack(fill=X, pady=(0, 10))
+    
+    Label(frame_nombre, 
+          text="Nombre del archivo (ej: Datos_BR.txt):", 
+          **estilos['label']).pack(side=LEFT, padx=(0, 10))
+    
+    entry_nombre = Entry(frame_nombre, 
+                        bg=COLORES['panel'], 
+                        fg=COLORES['texto'],
+                        font=FUENTES['normal'],
+                        relief='flat',
+                        bd=1,
+                        highlightthickness=0)
+    entry_nombre.pack(side=LEFT, fill=X, expand=True)
+    entry_nombre.focus_set()  # Enfoca el campo al abrir la ventana
+
+    Label(frame_principal, 
+          text="Ingrese los datos para el BR (un dato por línea):", 
+          **estilos['label']).pack(pady=(0, 10))
+
+    # Frame contenedor para el área de texto y scrollbar
+    frame_texto_container = Frame(frame_principal, bg=COLORES['borde'])
+    frame_texto_container.pack(fill=BOTH, expand=True, pady=(0, 10))
+
+    # Área de texto con scrollbar
+    text_datos = Text(frame_texto_container, 
+                     height=10,
+                     wrap=NONE,  # Desactiva el wrap para mejor visualización
+                     **estilos['texto'])
+    
+    # Scrollbar vertical
+    scroll_y = Scrollbar(frame_texto_container,
+                        orient=VERTICAL,
+                        command=text_datos.yview)
+    text_datos.configure(yscrollcommand=scroll_y.set)
+    
+    # Grid layout para mejor control
+    text_datos.grid(row=0, column=0, sticky="nsew")
+    scroll_y.grid(row=0, column=1, sticky="ns")
+    
+    # Configurar el peso de las columnas para que el texto ocupe todo el espacio
+    frame_texto_container.grid_rowconfigure(0, weight=1)
+    frame_texto_container.grid_columnconfigure(0, weight=1)
+
+    # Etiqueta para mensajes
+    label_mensaje = Label(frame_principal, 
+                         text="", 
+                         fg=COLORES['texto'], 
+                         bg=COLORES['fondo'], 
+                         font=FUENTES['normal'])
+    label_mensaje.pack()
+
+    # Frame para botones
+    frame_botones = Frame(frame_principal, **estilos['frame'])
+    frame_botones.pack(pady=(10, 0))
+
+    def guardar_datos():
+        contenido = text_datos.get("1.0", END).strip()
+        nombre_archivo = entry_nombre.get().strip()
+        
+        if not nombre_archivo:
+            label_mensaje.config(text="❌ Error: Debe especificar un nombre de archivo", fg="red")
+            return
+            
+        if not contenido:
+            label_mensaje.config(text="❌ Error: No se ingresaron datos", fg="red")
+            return
+
+        # Asegurar que tenga extensión .txt si no la tiene
+        if not nombre_archivo.lower().endswith('.txt'):
+            nombre_archivo += '.txt'
+
+        lineas = contenido.split('\n')
+        datos_binarios = []
+
+        try:
+            for linea in lineas:
+                dato = linea.strip()
+                if not dato:
+                    continue
+                numero = int(dato)
+                if numero < 0 or numero > 65535:
+                    raise ValueError("Los datos deben estar en un rango de 32 bits")
+                datos_binarios.append(format(numero, '032b'))
+
+            with open(nombre_archivo, 'w') as archivo:
+                for dato in datos_binarios:
+                    archivo.write(dato + '\n')
+
+            label_mensaje.config(text=f"✓ Archivo '{nombre_archivo}' generado con éxito", fg="green")
+            
+            # Cerrar ventana después de 2 segundos si fue exitoso
+            ventana_datos.after(2000, ventana_datos.destroy)
+            
+        except ValueError as e:
+            label_mensaje.config(text=f"❌ Error: {str(e)}", fg="red")
+
+    # Botón para guardar
+    boton_guardar = Button(frame_botones, 
+                          text="Guardar Datos", 
+                          command=guardar_datos, 
+                          **estilos['boton_principal'])
+    boton_guardar.pack(side=LEFT, padx=5)
+    configurar_hover(boton_guardar, COLORES['principal'], COLORES['principal_hover'])
+
+    # Botón para cancelar
+    boton_cancelar = Button(frame_botones, 
+                           text="Cancelar", 
+                           command=ventana_datos.destroy, 
+                           **estilos['boton_secundario'])
+    boton_cancelar.pack(side=LEFT, padx=5)
+    configurar_hover(boton_cancelar, COLORES['secundario'], COLORES['secundario_hover'])
+
+    # Botón: Regresar
+    boton_regresar = Button(frame_botones, text="Regresar", command=ventana_datos.destroy, **estilos['boton_secundario'])
+    boton_regresar.pack(side=LEFT, padx=5, pady=5)  # pack
+
+
 def salir():
     root.quit()
     
@@ -359,7 +494,7 @@ def reconstruir_interfaz():
     estilos = crear_estilos()
     
     root.configure(bg=COLORES['fondo'])
-    
+
     # Frame superior
     frame_superior = Frame(root, **estilos['frame'])
     frame_superior.pack(pady=(20, 10), fill=X, padx=20)
@@ -384,6 +519,14 @@ def reconstruir_interfaz():
     boton_ver_decodificado.grid(row=0, column=1)
     configurar_hover(boton_ver_decodificado, COLORES['principal'], COLORES['principal_hover'])
     boton_ver_decodificado.grid_remove()
+
+    # Dentro de frame_botones en reconstruir_interfaz()
+    boton_datos_br = Button(frame_botones, 
+                        text="Generar Datos BR", 
+                        command=generar_datos_br, 
+                        **estilos['boton_principal'])
+    boton_datos_br.grid(row=0, column=2, padx=10)
+    configurar_hover(boton_datos_br, COLORES['principal'], COLORES['principal_hover'])
 
     # Frame para la ruta del archivo (nuevo)
     global label_ruta
